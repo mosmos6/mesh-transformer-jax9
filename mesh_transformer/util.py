@@ -1,7 +1,7 @@
 import jax
 import jax.numpy as jnp
 from jax.experimental.pjit import with_sharding_constraint
-from optax import add_decayed_weights, GradientTransformation
+from optax import AdditiveWeightDecayState, GradientTransformation
 from typing import NamedTuple
 import chex
 
@@ -76,7 +76,7 @@ def additive_weight_decay(weight_decay: float = 0.0) -> GradientTransformation:
     """
 
     def init_fn(_):
-        return add_decayed_weights()
+        return AdditiveWeightDecayState()
 
     def update_fn(updates, state, params):
         updates = jax.tree_map(lambda g, p: g + weight_decay * p * (len(g.shape) > 1), updates, params)
