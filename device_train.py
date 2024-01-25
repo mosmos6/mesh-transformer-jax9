@@ -19,6 +19,7 @@ from google.cloud import storage
 from google.cloud.exceptions import NotFound
 
 from mesh_transformer.util import clip_by_global_norm, additive_weight_decay
+from jax.experimental.multihost_utils import process_allgather
 
 
 def parse_args():
