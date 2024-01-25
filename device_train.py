@@ -131,8 +131,11 @@ def eval_step(network, data):
     out = network.eval(inputs)
     loss = out["loss"]
 
-    return np.array(loss).mean()
+    # Gather the distributed array data
+    loss = process_allgather(loss)
 
+    # Now you can safely convert it to a NumPy array and calculate the mean
+    return np.array(loss).mean()
 
 if __name__ == "__main__":
     args = parse_args()
