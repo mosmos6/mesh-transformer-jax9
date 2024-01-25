@@ -278,8 +278,8 @@ if __name__ == "__main__":
                 network.state["opt_state"]=list(network.state["opt_state"])
                 network.state["opt_state"][-1] = init_sched_state
                 network.state["opt_state"]=tuple(network.state["opt_state"])
-                print("network.state")
-                print(network.state["opt_state"])
+                #print("network.state")
+                #print(network.state["opt_state"])
 
             print(f"network loaded in {time.time() - start:.06}s")
 
