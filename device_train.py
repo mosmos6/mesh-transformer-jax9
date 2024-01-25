@@ -295,8 +295,8 @@ if __name__ == "__main__":
         start = time.time()
         with jax.spmd_mode('allow_all'):
             for val_set in val_sets.values():
-            eval_step(network, val_set.get_samples())
-            val_set.reset()
+                eval_step(network, val_set.get_samples())
+                val_set.reset()
             print(f"Eval fn compiled in {time.time() - start:.06}s")
 
         project = params.get("wandb_project", "mesh-transformer-jax")
