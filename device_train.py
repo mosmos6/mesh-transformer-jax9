@@ -114,6 +114,13 @@ def train_step(network, data):
 
     loss, last_loss, grad_norm, grad_norm_micro = network.train(inputs)
 
+    # Gather the distributed array data
+    loss = process_allgather(loss)
+    last_loss = process_allgather(last_loss)
+    grad_norm = process_allgather(grad_norm)
+    grad_norm_micro = process_allgather(grad_norm_micro)
+
+    # Calculate the mean on the gathered data
     return (
         np.array(loss).mean(),
         np.array(last_loss).mean(),
