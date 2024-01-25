@@ -285,18 +285,19 @@ if __name__ == "__main__":
 
         print('compiling train fn')
         start = time.time()
-        loss, last_loss, grad_norm, grad_norm_micro = train_step(
-            network, train_dataset.get_samples()
-        )
-        step += 1
-        print(f"Train fn compiled in {time.time() - start:.06}s")
+        with jax.spmd_mode('allow_all'):
+            loss, last_loss, grad_norm, grad_norm_micro = train_step(
+            network, train_dataset.get_samples())
+            step += 1
+            print(f"Train fn compiled in {time.time() - start:.06}s")
 
         print('compiling eval fn')
         start = time.time()
-        for val_set in val_sets.values():
+        with jax.spmd_mode('allow_all'):
+            for val_set in val_sets.values():
             eval_step(network, val_set.get_samples())
             val_set.reset()
-        print(f"Eval fn compiled in {time.time() - start:.06}s")
+            print(f"Eval fn compiled in {time.time() - start:.06}s")
 
         project = params.get("wandb_project", "mesh-transformer-jax")
         wandb.init(project=project, name=params["name"], config=params)
