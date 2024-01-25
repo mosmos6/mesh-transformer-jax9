@@ -11,7 +11,7 @@
   "seq": 2048,
   "cores_per_replica": 8,
   "per_replica_batch": 1,
-  "gradient_accumulation_steps": 992,
+  "gradient_accumulation_steps": 421,
 
   "warmup_steps": 1,
   "anneal_steps": 9,
@@ -22,13 +22,13 @@
 
   "tpu_size": 8,
 
-  "bucket": "gptjtest2dummy",
-  "model_dir": "puurecipedummy",
+  "bucket": "kabayaki_models",
+  "model_dir": "newpoli",
 
-  "train_set": "gptjtest.train.indexdummy",
+  "train_set": "gptjtest.train.index",
   "val_set": {
-    "pile": "gptjtest.val.indexdummy",
-    "owt": "gptjtest.val.indexdummy"
+    "pile": "gptjtest.val.index",
+    "owt": "gptjtest.val.index"
   },
 
   "eval_harness_tasks": [
@@ -41,12 +41,12 @@
   ],
   
   
-  "val_batches": 31,
+  "val_batches": 25,
   "val_every": 100,
   "ckpt_every": 500,
   "keep_every": 10000,
 
-  "name": "gptjtestdummy",
+  "name": "kabayakitest",
   "wandb_project": "mesh-transformer-jax",
   "comment": ""
 }
