@@ -259,7 +259,7 @@ class CausalTransformer:
         dp = thread_resources.env.shape['dp']
         mp = thread_resources.env.shape['mp']
 
-        mp_per_host = min(4, 8)
+        mp_per_host = min(mp, 8)
 
         seq = config["seq"]
         vocab = config["n_vocab"]
