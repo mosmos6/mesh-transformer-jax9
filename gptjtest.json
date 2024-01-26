@@ -47,6 +47,6 @@
   "keep_every": 10000,
 
   "name": "kabayakitest",
-  "wandb_project": "mesh-transformer-jax",
+  "wandb_project": "kabayaki",
   "comment": ""
 }
