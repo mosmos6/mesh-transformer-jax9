@@ -266,7 +266,7 @@ if __name__ == "__main__":
 
     # load + run
     all_devices = jax.devices()
-    devices_matrix = np.array(all_devices).reshape(2, 4)
+    devices_matrix = np.array(all_devices).reshape(1, 4)
     with jax.sharding.Mesh(devices_matrix, ('dp', 'mp')):
         print("initializing network")
         network = CausalTransformer(params)
