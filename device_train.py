@@ -265,7 +265,9 @@ if __name__ == "__main__":
     tokens_per_step = params['seq'] * sequences_per_step
 
     # load + run
-    with jax.sharding.Mesh(devices, ('dp', 'mp')):
+    all_devices = jax.devices()
+    devices_matrix = np.array(all_devices).reshape(2, 4)
+    with jax.sharding.Mesh(devices_matrix, ('dp', 'mp')):
         print("initializing network")
         network = CausalTransformer(params)
 
