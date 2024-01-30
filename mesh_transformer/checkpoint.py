@@ -147,32 +147,44 @@ def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
 
     def _unshard(shards, old_flattened):
         unsharded = []
+        print("point 1")
 
         for old, *all_shards in zip(old_flattened, *shards):
             x = np.stack(all_shards)
+            print("point 2")
             # No idea why this is V2...?
             if x.dtype == np.dtype('V2'):
                 x.dtype = jnp.bfloat16
+                print("point 3")
 
             if shards_out != shards_in:
                 x = reshard(x, old.shape)
+                print("point 4")
             unsharded.append(x)
+            print("point 5")
 
             assert x.shape == old.shape, f"Incompatible checkpoints {x.shape} vs {old.shape}"
+            print("point 6")
         return unsharded
+        print("point 7")
     try:
         unsharded = _unshard(shards, old_flattened)
+        print("point 8")
     except AssertionError:
         load_opt = False  # no opt to load in ckpt
         del pytree['opt_state']
         old_flattened, structure = jax.tree_util.tree_flatten(pytree)
         unsharded = _unshard(shards, old_flattened)
+        print("point 9")
 
     loaded_pytree = jax.tree_util.tree_unflatten(structure, unsharded)
+    print("point 10")
 
     if not load_opt:
         loaded_pytree['opt_state'] = original_opt_state
+        print("point 11")
     return loaded_pytree
+    print("point 12")
 
 
 def read_ckpt_lowmem(pytree, dir, shards_in, shards_out=None, load_opt=True):
