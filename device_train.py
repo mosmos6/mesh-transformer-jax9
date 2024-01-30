@@ -279,7 +279,7 @@ if __name__ == "__main__":
                 #print(init_sched_state)
 
             start = time.time()
-            network.state = read_ckpt(network.state, initial_ckpt_state_path, devices.shape[1], load_opt=(not args.fresh_opt))
+            network.state = read_ckpt(network.state, initial_ckpt_state_path, 8, devices.shape[1], load_opt=(not args.fresh_opt))
 
             if fine_tuning:
                 # overwrite the loaded scheduler step with zeros
