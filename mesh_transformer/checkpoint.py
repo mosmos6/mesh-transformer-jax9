@@ -151,7 +151,7 @@ def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
 
     def _unshard(shards, old_flattened):
         unsharded = []
-        print(""Starting unsharding process"")
+        print("Starting unsharding process")
 
         for old, *all_shards in zip(old_flattened, *shards):
             x = np.stack(all_shards)
