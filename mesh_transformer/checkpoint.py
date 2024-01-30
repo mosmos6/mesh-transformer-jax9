@@ -151,11 +151,11 @@ def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
 
     def _unshard(shards, old_flattened):
         unsharded = []
-        print("point 1")
+        print(""Starting unsharding process"")
 
         for old, *all_shards in zip(old_flattened, *shards):
             x = np.stack(all_shards)
-            print("point 2")
+            print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
             # No idea why this is V2...?
             if x.dtype == np.dtype('V2'):
                 x.dtype = jnp.bfloat16
@@ -167,14 +167,15 @@ def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
             unsharded.append(x)
             print("point 5")
 
-            assert x.shape == old.shape, f"Incompatible checkpoints {x.shape} vs {old.shape}"
+            assert x.shape == old.shape, f"Incompatible checkpoints for tensor {i}: {x.shape} vs {old.shape}"
             print("point 6")
         return unsharded
         print("point 7")
     try:
         unsharded = _unshard(shards, old_flattened)
         print("point 8")
-    except AssertionError:
+    except AssertionError as e:
+        print(f"Assertion error during unsharding: {e}")
         load_opt = False  # no opt to load in ckpt
         del pytree['opt_state']
         old_flattened, structure = jax.tree_util.tree_flatten(pytree)
