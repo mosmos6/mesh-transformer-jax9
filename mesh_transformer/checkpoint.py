@@ -153,7 +153,7 @@ def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
         unsharded = []
         print("Starting unsharding process")
 
-        for old, *all_shards in zip(old_flattened, *shards):
+        for i, (old, *all_shards) in enumerate(zip(old_flattened, *shards)):
             x = np.stack(all_shards)
             print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
             # No idea why this is V2...?
