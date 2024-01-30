@@ -116,12 +116,12 @@ def reshard(x, old_shape):
         print(out[:, :16])
 
     elif len(x.shape) == 3:
-        # print(f"weight {x.shape}")
+        print(f"weight {x.shape}")
         if x.shape[0] * x.shape[2] == old_shape[2]:
-            # print("case 1")
+            print("case 1")
             out = jnp.transpose(x, (1, 0, 2)).reshape(old_shape)
         elif x.shape[0] * x.shape[1] == old_shape[1]:
-            # print("case 2")
+            print("case 2")
             out = x.reshape(old_shape)
         else:
             raise Exception(f"unimplemented, {x.shape}, {old_shape}")
