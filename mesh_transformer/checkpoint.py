@@ -134,16 +134,20 @@ def reshard(x, old_shape):
 def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
     if shards_out is None:
         shards_out = shards_in
+        print("point 13")
 
     old_flattened, structure = jax.tree_util.tree_flatten(pytree)
+    print("point 14")
 
     original_opt_state = pytree["opt_state"]
+    print("point 15")
 
     # TODO: figure out how to use a process pool here for more speed
     with multiprocessing.pool.ThreadPool(shards_in) as p:
         start = time.time()
         shards = list((p.imap(read_shard, [f"{dir}shard_{i}/" for i in range(shards_in)])))
         print(f"read from disk/gcs in {time.time() - start:.06}s")
+        print("point 16")
 
     def _unshard(shards, old_flattened):
         unsharded = []
