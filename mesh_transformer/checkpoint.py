@@ -154,24 +154,28 @@ def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
         unsharded = []
         print("Starting unsharding process")
 
-        for i, (old, *all_shards) in enumerate(zip(old_flattened, *shards)):
+        for i, old in enumerate(old_flattened):
+            # Collect all shards for the current tensor
+            all_shards = [shards[j][i] for j in range(len(shards))]
             x = np.stack(all_shards)
             print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
-            # No idea why this is V2...?
+
             if x.dtype == np.dtype('V2'):
                 x.dtype = jnp.bfloat16
-                print("point 3")
+                print("Converted dtype to bfloat16")
 
             if shards_out != shards_in:
                 x = reshard(x, old.shape)
-                print("point 4")
+                print(f"Reshaped tensor: New shape {x.shape}")
+
             unsharded.append(x)
-            print("point 5")
+            print(f"Appended reshaped tensor: Shape {x.shape}")
 
             assert x.shape == old.shape, f"Incompatible checkpoints for tensor {i}: {x.shape} vs {old.shape}"
-            print("point 6")
+
         return unsharded
         print("point 7")
+        
     try:
         unsharded = _unshard(shards, old_flattened)
         print("point 8")
