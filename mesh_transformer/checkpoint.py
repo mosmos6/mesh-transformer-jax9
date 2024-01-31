@@ -130,6 +130,9 @@ def reshard(x, old_shape):
         elif x.shape[0] * x.shape[1] == old_shape[1]:
             print("Handling case 2")
             out = jnp.reshape(x, old_shape)
+        elif x.shape[1] == old_shape[1] and x.shape[2] * x.shape[0] == old_shape[2]:
+            print("Reshaping case 3 for weight tensors")
+            out = jnp.concatenate(jnp.split(x, 2, axis=0), axis=2)
         else:
             raise Exception(f"Reshaping unimplemented for tensor shapes: {x.shape}, {old_shape}")
         print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
