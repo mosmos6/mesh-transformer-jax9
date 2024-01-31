@@ -113,11 +113,12 @@ def reshard(x, old_shape):
                 out = x[0:1]
             else:
                 print("Handling shard bias case")
-                out = x[0:1] * x.shape[0] / old_shape[0]
+                out = x[:old_shape[0]]
+                print(f"After handling LN/bias: {out.shape}")
         else:
-            print("Handling regular bias case")
+            print("Standard bias case")
             out = x.reshape(old_shape)
-        print(f"After handling LN/bias: {out.shape}")
+        print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
 
         #print(out[:, :16])
 
