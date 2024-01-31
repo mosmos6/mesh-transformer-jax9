@@ -128,6 +128,7 @@ def reshard(x, old_shape):
     else:
         raise Exception(f"unimplemented, {x}")
 
+    print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
     return out
 
 
