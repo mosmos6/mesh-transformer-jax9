@@ -93,42 +93,45 @@ def read_shard(ckpt_dir):
 
 
 def reshard(x, old_shape):
+    # Initial Tensor Details
+    print(f"Resharding: Initial tensor shape {x.shape}, Old shape {old_shape}")
+
     if len(x.shape) == 1:
-        # print("epoch")
-        # print(x)
+        print("Handling tensor with shape length 1")
         out = x[0:1]
 
     elif len(x.shape) == 2:
-        # print(f"LN/bias {x.shape}")
-        # print(x[:, :16])
-
+        print(f"Handling LN/bias tensor. Original shape: {x.shape}")
         if (x[1:] == x[-1]).all():
-            # print("LN")
+            print("Inside LN case")
             if (x[1:] == 0).all() or (x[1:] == 1).all():
                 out = x[0:1]
             else:
-                # print("shard bias")
+                print("Handling shard bias case")
                 out = x[0:1] * x.shape[0] / old_shape[0]
         else:
-            # print("bias")
+            print("Handling regular bias case")
             out = x.reshape(old_shape)
+        print(f"After handling LN/bias: {out.shape}")
 
-        print(out[:, :16])
+        #print(out[:, :16])
 
     elif len(x.shape) == 3:
-        print(f"weight {x.shape}")
+        print(f"Handling weight tensor. Original shape: {x.shape}")
         if x.shape[0] * x.shape[2] == old_shape[2]:
-            print("case 1")
+            print("Handling case 1")
             out = jnp.transpose(x, (1, 0, 2)).reshape(old_shape)
         elif x.shape[0] * x.shape[1] == old_shape[1]:
-            print("case 2")
+            print("Handling case 2")
             out = x.reshape(old_shape)
         else:
             raise Exception(f"unimplemented, {x.shape}, {old_shape}")
+        print(f"After handling weight tensor: {out.shape}")
     else:
-        raise Exception(f"unimplemented, {x}")
+        raise Exception(f"unimplemented, {x.shape}")
 
     print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
+    print(f"Sample content (if feasible): {out.flatten()[:10]}")
     return out
 
 
