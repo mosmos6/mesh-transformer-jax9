@@ -96,9 +96,14 @@ def reshard(x, old_shape):
     # Initial Tensor Details
     print(f"Resharding: Initial tensor shape {x.shape}, Old shape {old_shape}")
 
+    # If the tensor is scalar-like, replicate it to match the expected shape
     if len(x.shape) == 1:
         print("Handling tensor with shape length 1")
-        out = x[0:1]
+        if old_shape[0] > x.shape[0]:
+            out = jnp.repeat(x[0], old_shape[0])
+        else:
+            out = x[:old_shape[0]]
+        print(f"Reshaped scalar tensor: {out.shape}")
 
     elif len(x.shape) == 2:
         print(f"Handling LN/bias tensor. Original shape: {x.shape}")
