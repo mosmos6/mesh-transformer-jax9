@@ -351,6 +351,7 @@ def save_pytree_as_hf(
     old_leave_shapes = [old.shape for old in jax.tree_util.tree_flatten(pytree)[0]]
     leave_names = get_tree_leaves_names_reduced(pytree)
     del pytree
+    print(leave_names)
 
     assert len(old_leave_shapes) == len(
         leave_names
