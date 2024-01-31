@@ -131,7 +131,7 @@ def reshard(x, old_shape):
     return out
 
 
-def read_ckpt(pytree, dir, shards_in, shards_out=None, load_opt=True):
+def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
     if shards_out is None:
         shards_out = shards_in
         print("point 13")
