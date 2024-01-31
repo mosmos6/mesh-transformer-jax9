@@ -20,7 +20,7 @@
   "weight_decay": 0.1,
   "total_steps": 10,
 
-  "tpu_size": 8,
+  "tpu_size": 4,
 
   "bucket": "kabayaki_models",
   "model_dir": "newpoli",
