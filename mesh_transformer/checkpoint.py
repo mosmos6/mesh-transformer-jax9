@@ -124,15 +124,16 @@ def reshard(x, old_shape):
 
     elif len(x.shape) == 3:
         print(f"Handling weight tensor. Original shape: {x.shape}")
-        if x.shape[0] * x.shape[2] == old_shape[2]:
-            print("Handling case 1")
+        # Check if reshaping from 8 to 4 shards, with specific dimensions
+        if x.shape[0] == 8 and old_shape[0] == 4 and x.shape[1] * 2 == old_shape[1] and x.shape[2] == old_shape[2]:
+            print("Specific reshaping case for (8, 6300, 4096) to (4, 12600, 4096)")
+            out = jnp.concatenate((x[:4], x[4:]), axis=1)
+        elif x.shape[0] * x.shape[2] == old_shape[2]:
+            print("Reshaping case 1")
             out = jnp.reshape(jnp.transpose(x, (1, 0, 2)), old_shape)
         elif x.shape[0] * x.shape[1] == old_shape[1]:
-            print("Handling case 2")
+            print("Reshaping case 2")
             out = jnp.reshape(x, old_shape)
-        elif x.shape[1] == old_shape[1] and x.shape[2] * x.shape[0] == old_shape[2]:
-            print("Reshaping case 3 for weight tensors")
-            out = jnp.concatenate(jnp.split(x, 2, axis=0), axis=2)
         else:
             raise Exception(f"Reshaping unimplemented for tensor shapes: {x.shape}, {old_shape}")
         print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
