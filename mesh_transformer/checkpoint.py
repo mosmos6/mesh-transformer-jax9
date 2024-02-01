@@ -138,7 +138,7 @@ def reshard(x, old_shape):
             print("Specific reshaping case for (8, 4096, 512) to (4, 4096, 1024)")
             # Assuming the data needs to be reorganized in a specific way
             # This is a placeholder logic, adjust as per the actual data transformation requirement
-            out = jnp.concatenate((x[:, :, :512], x[:, :, 512:]), axis=2)
+            out = jnp.concatenate((x[:512], x[512:]), axis=2)
         else:
             raise Exception(f"Reshaping unimplemented for tensor shapes: {x.shape}, {old_shape}")
         print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
