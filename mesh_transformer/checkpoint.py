@@ -138,7 +138,7 @@ def reshard(x, old_shape):
             print("Specific reshaping case for (8, 4096, 512) to (4, 4096, 1024)")
             # Assuming the data needs to be reorganized in a specific way
             # This is a placeholder logic, adjust as per the actual data transformation requirement
-            out = jnp.concatenate((x[:512], x[512:]), axis=2)
+            out = jnp.concatenate((x[:, :, :512], x[:, :, 512:]), axis=2)
         else:
             raise Exception(f"Reshaping unimplemented for tensor shapes: {x.shape}, {old_shape}")
         print(f"Reshaped tensor: Original shape {x.shape}, New shape {out.shape}")
@@ -174,7 +174,7 @@ def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
 
         for i, old in enumerate(old_flattened):
             # Collect all shards for the current tensor
-            all_shards = [shards[j][i] for j in range(len(shards))]
+            all_shards = [shards[j][i] for j in range(len(shards)-1)]
             x = np.stack(all_shards)
             print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
 
