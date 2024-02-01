@@ -174,7 +174,7 @@ def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
 
         for i, old in enumerate(old_flattened):
             # Collect all shards for the current tensor
-            all_shards = [shards[j][i] for j in range(len(shards)-1)]
+            all_shards = [shards[j][i] for j in range(len(shards))]
             x = np.stack(all_shards)
             print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
 
