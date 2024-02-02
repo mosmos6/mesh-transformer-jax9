@@ -172,10 +172,16 @@ def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
         unsharded = []
         print("Starting unsharding process")
 
+        print(f"old_flattened length: {len(old_flattened)}")
         for i, old in enumerate(old_flattened):
+            print(f"Tensor {i} shape: {old.shape}")
             # Collect all shards for the current tensor
             all_shards = [shards[j][i] for j in range(len(shards))]
+            print(f"Processing tensor {i}:")
+            for shard_idx, shard in enumerate(all_shards):
+                print(f"  Shard {shard_idx} shape: {shard.shape}")
             x = np.stack(all_shards)
+            print(f"  Stacked x shape: {x.shape}, Expected shape: {old.shape}")
             print(f"Processing tensor {i}: Stacked shape {x.shape}, Expected shape {old.shape}")
 
             if x.dtype == np.dtype('V2'):
@@ -183,7 +189,9 @@ def read_ckpt(pytree, dir, shards_in=8, shards_out=4, load_opt=True):
                 print("Converted dtype to bfloat16")
 
             if shards_out != shards_in:
+                x_before = x.shape
                 x = reshard(x, old.shape)
+                print(f"  Before reshard: {x_before}, after reshard: {x.shape}, expected: {old.shape}")
                 print(f"Reshaped tensor: New shape {x.shape}")
 
             unsharded.append(x)
